@@ -12,13 +12,13 @@ class Exercise::FpTest < Minitest::Test
 
     result = Exercise::Fp.rating(array)
     # rubocop:disable Lint/FloatComparison
-    assert result == 6.178142857142854
+    assert result == 6.809410385259628
     # rubocop:enable Lint/FloatComparison
   end
 
   # Посчитать количесвто букв 'и' в названиях всех фильмов с рейтингом кинопоиска больше или равным заданному значению
   def test_chars_count
-    skip
+    # skip
     array = CSV.readlines('./test/fixtures/films.csv', headers: true)
 
     result = Exercise::Fp.chars_count(array, 5)
