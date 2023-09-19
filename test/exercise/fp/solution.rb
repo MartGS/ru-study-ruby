@@ -10,8 +10,9 @@ module Exercise
         end
         
         new_array.compact!
+        total_raiting = new_array.inject(0, :+)
 
-        result = new_array.sum / new_array.size
+        result = total_raiting / new_array.size
       end
       
       def chars_count(films, threshold)
