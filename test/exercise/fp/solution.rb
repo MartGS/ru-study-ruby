@@ -5,52 +5,33 @@ module Exercise
       # film["name"], film["rating_kinopoisk"], film["rating_imdb"],
       # film["genres"], film["year"], film["access_level"], film["country"]
       def rating(array)
-        values_to_calculate = {}
-        values_to_calculate[:sum] = 0
-        values_to_calculate[:number_of_films] = 0
+        filtered_array = array.map do |film|
+          film["rating_kinopoisk"].to_f if is_film_match_search_criteria?(film)
+        end
         
-        array = array.reduce([]) do |intermediate_array, film|
-          intermediate_array << film if film["country"].present? && film["country"].split(',').size > 1
-          intermediate_array.reduce([]) do |final_array, film|
-            final_array << film unless film["rating_kinopoisk"].nil? || film["rating_kinopoisk"] == 0
-            final_array
-          end
-        end
+        filtered_array.compact!
+        total_raiting = filtered_array.inject(0, :+)
 
-        array.each do |film|
-          calculations(film, values_to_calculate)
-        end
-
-        result_for_method_rating(values_to_calculate)
+        p result = total_raiting / filtered_array.size
       end
       
       def chars_count(films, threshold)
-        hash_for_letter = {}
-        hash_for_letter[:i] = 0
-
-        films = films.reduce([]) do |new_array, film|
-          new_array << film if film["rating_kinopoisk"].to_f >= threshold
-          new_array
+        total_letter_i = films.reduce(0) do |acc, film|
+          acc += film["name"].count "и" if is_film_match_raiting_value?(film, threshold)
+          acc
         end
 
-        films.map { |film| film["name"].each_char { |letter| letter == 'и' ? calculate_i(hash_for_letter) : next } }
-
-        result = hash_for_letter[:i]
+        p total_letter_i
       end
 
       private
 
-      def calculations(film, values_to_calculate)
-        values_to_calculate[:sum] += film["rating_kinopoisk"].to_f
-        values_to_calculate[:number_of_films] += 1
+      def is_film_match_raiting_value?(film, threshold)
+        film["rating_kinopoisk"].to_f >= threshold
       end
 
-      def result_for_method_rating(values_to_calculate)
-        result = values_to_calculate[:sum] / values_to_calculate[:number_of_films]
-      end
-
-      def calculate_i(hash_for_letter)
-        hash_for_letter[:i] += 1
+      def is_film_match_search_criteria?(film)
+        film["country"].present? && film["country"].split(',').size > 1 && film["rating_kinopoisk"].present? && film["rating_kinopoisk"].to_f > 0
       end
     end
   end
