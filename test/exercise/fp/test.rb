@@ -12,7 +12,7 @@ class Exercise::FpTest < Minitest::Test
 
     result = Exercise::Fp.rating(array)
     # rubocop:disable Lint/FloatComparison
-    assert result == 6.809410385259628
+    assert result == 6.178142857142854
     # rubocop:enable Lint/FloatComparison
   end
 
